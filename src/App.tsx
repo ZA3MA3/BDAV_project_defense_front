@@ -1,6 +1,6 @@
 
 import './App.css'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button } from "./components/ui/button"
 import { Input } from './components/ui/input';
@@ -26,30 +26,15 @@ function SignIn() {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  // const handleSignIn = async (e: React.FormEvent) => {  
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.post('http://localhost:5000/auth/signin', {
-  //       userNumber: parseInt(userNumber),
-  //       password: parseInt(password),
-  //     });
-  //     if (response.data.success) {
-  //       if (response.data.role == 3) {
-  //         navigate('/admin-dashboard'); 
-  //       } else if (response.data.role == 2) {
-  //         navigate('/professor-dashboard');
-  //       } else if (response.data.role == 1) {
-  //         navigate('/student-dashboard');
-  //       }
-  //     } else {
-  //       setMessage(response.data.message);
-  //     }
-  //   } catch (error) {
-  //     setMessage('user doesnt exist');
+  useEffect(() => {
+    localStorage.clear();     
+    sessionStorage.clear();   
+  
+    
+  }, []);
+  
 
-      
-  //   }
-  // };
+  
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
