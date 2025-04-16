@@ -201,7 +201,7 @@ export default function AddProject() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.supervisor_id || !formData.student_id) {
+    if ( !formData.student_id) {
       alert("Please select a professor and ensure you are logged in.");
       return;
     }

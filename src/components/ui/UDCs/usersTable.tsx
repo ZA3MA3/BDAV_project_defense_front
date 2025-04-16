@@ -263,6 +263,8 @@ export default function UsersTable() {
       .then((data) => setUsers(data))
       .catch((err) => console.error("Error fetching users:", err));
 
+   
+
     fetch("http://localhost:5000/admin/projects")
       .then((res) => res.json())
       .then((data) => setProjects(data))
@@ -272,6 +274,7 @@ export default function UsersTable() {
       .then((res) => res.json())
       .then((data) => setDefenses(data))
       .catch((err) => console.error("Error fetching defenses:", err));
+  
   }, []);
 
   const handleDelete = (userId: number) => {

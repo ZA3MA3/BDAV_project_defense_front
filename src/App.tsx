@@ -6,7 +6,7 @@ import { Button } from "./components/ui/button"
 import { Input } from './components/ui/input';
 import { Label } from './components/ui/label';
 import { UserNumberInput, BirthdateInput } from './components/ui/UDCs/login';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate ,useLocation} from 'react-router-dom';
 import AdminDashboard from './pages/admin-dashboard';
 import ProfessorDashboard from './pages/professor-dashboard';
 import StudentDashboard from './pages/student-dashboard';
@@ -25,15 +25,22 @@ function SignIn() {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
 
-  useEffect(() => {
-    localStorage.clear();     
-    sessionStorage.clear();   
+  // useEffect(() => {
+  //   localStorage.clear();     
+  //   sessionStorage.clear();   
   
     
-  }, []);
+  // }, []);
   
-
+  // useEffect(() => {
+  //   if (location.pathname === '/') {
+  //     localStorage.clear();
+  //     sessionStorage.clear();
+  //     console.log("cleared");
+  //   }
+  // }, [location]);
   
 
   const handleSignIn = async (e: React.FormEvent) => {
@@ -46,6 +53,8 @@ function SignIn() {
   
       // Step 1: Sign in
       const response = await axios.post('http://localhost:5000/auth/signin', credentials);
+
+      console.log(response,"response");
   
       if (response.data.success) {
         const role = response.data.role;
@@ -55,6 +64,8 @@ function SignIn() {
           userNumber: credentials.userNumber,
           password: credentials.password,
         });
+
+        console.log(idRes,"idRes");
   
         // Step 3: Store ID and role in localStorage
         if (idRes.data.role === 'student') {
@@ -77,6 +88,7 @@ function SignIn() {
         }
       } else {
         setMessage(response.data.message);
+
       }
     } catch (error) {
       setMessage('User does not exist or an error occurred');

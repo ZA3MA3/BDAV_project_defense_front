@@ -237,29 +237,73 @@ interface Supervisor {
         // Store all defense data for reference when opening dialog
         setAllDefenses(data);
         
-        const formattedEvents = data.map((defense) => ({
-          id: defense.defense_id,
-          title: defense.project?.title ?? 'Untitled Project',
-          date: format(new Date(defense.defense_date), 'yyyy-MM-dd'),
-          description: `Location: ${defense.location}
-            Supervisor: ${defense.project?.supervisor?.name ?? 'N/A'} (${defense.project?.supervisor?.email ?? 'N/A'})
-            Students: ${defense.project?.students?.map((s) => s.name).join(', ') || 'None'}`,
-          extendedProps: {
-            defenseId: defense.defense_id
-          }
-        }));
+        // const formattedEvents = data.map((defense) => ({
+          
+        //   id: defense.defense_id,
+        //   title: defense.project?.title ?? 'Untitled Project',
+        //   // date: format(new Date(defense.defense_date), 'yyyy-MM-dd'),
+        //   date: format(new Date(defense.defense_date), 'yyyy-MM-dd'),
+        //   description: ` ${defense.location}
+        //     Supervisor: ${defense.project?.supervisor?.name ?? 'N/A'} (${defense.project?.supervisor?.email ?? 'N/A'})
+        //     Students: ${defense.project?.students?.map((s) => s.name).join(', ') || 'None'}`,
+        //   extendedProps: {
+        //     defenseId: defense.defense_id
+        //   }
+        // }));
+        const formattedEvents = data.map((defense) => {
+          const defenseDate = new Date(defense.defense_date);
+          const time = format(defenseDate, 'p'); // e.g., 10:00 AM
         
+          return {
+            id: defense.defense_id,
+            title: defense.project?.title ?? 'Untitled Project',
+            date: format(defenseDate, 'yyyy-MM-dd'),
+            description: `Time: ${time}
+              Location: ${defense.location}
+              Supervisor: ${defense.project?.supervisor?.name ?? 'N/A'} (${defense.project?.supervisor?.email ?? 'N/A'})
+              Students: ${defense.project?.students?.map((s) => s.name).join(', ') || 'None'}`,
+            extendedProps: {
+              defenseId: defense.defense_id
+            }
+          };
+        });
         setEvents(formattedEvents);
       } catch (err) {
         console.error('Error fetching defenses:', err);
       }
     };
   
+    // const handleEventClick = (info: any) => {
+    //   const defenseId = info.event.extendedProps.defenseId;
+    //   const defense = allDefenses.find(d => d.defense_id === defenseId);
+      
+    //   if (defense && defense.project && defense.project.students) {
+    //     setSelectedDefenseId(defenseId);
+    //     setSelectedStudents(defense.project.students);
+    //     setDialogOpen(true);
+    //   } else {
+    //     console.error('No students found for this defense');
+    //   }
+    // };
+  
     const handleEventClick = (info: any) => {
       const defenseId = info.event.extendedProps.defenseId;
       const defense = allDefenses.find(d => d.defense_id === defenseId);
-      
-      if (defense && defense.project && defense.project.students) {
+    
+      if (!defense) {
+        console.error('Defense not found');
+        return;
+      }
+    
+      const now = new Date();
+      const defenseDate = new Date(defense.defense_date);
+    
+      if (now < defenseDate) {
+       
+        return;
+      }
+    
+      if (defense.project && defense.project.students) {
         setSelectedDefenseId(defenseId);
         setSelectedStudents(defense.project.students);
         setDialogOpen(true);
@@ -267,7 +311,8 @@ interface Supervisor {
         console.error('No students found for this defense');
       }
     };
-  
+    
+
     return (
       <div className="calendar-container" style={{ width: '85%', margin: '0 auto' }}>
         <FullCalendar
