@@ -73,13 +73,17 @@ export default function AddDefenseDialog({ isOpen, onClose }: AddDefenseDialogPr
     const alreadySelected = selectedProfessors.find((p) => p.user_id === prof.user_id);
     if (alreadySelected) {
       setSelectedProfessors(selectedProfessors.filter((p) => p.user_id !== prof.user_id));
-    } else if (selectedProfessors.length < 3) {
+    } else {
       setSelectedProfessors([...selectedProfessors, prof]);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (selectedProfessors.length < 3) {
+     
+      return;
+    }
     const payload = {
       project_id: Number(form.project_id),
       defense_date: form.defense_date,

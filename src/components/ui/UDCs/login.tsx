@@ -18,6 +18,9 @@ const UserNumberInput = React.forwardRef<HTMLInputElement, InputProps>(({ classN
       <Input
         // type={showUserNumber ? 'text' : 'password'}
          type='text'
+         inputMode="numeric"
+         pattern="[0-9]*"
+         maxLength={10}
         className={cn('hide-usernumber-toggle pr-10', className)}
         ref={ref}
         {...props}
@@ -60,6 +63,9 @@ const BirthdateInput = React.forwardRef<HTMLInputElement, InputProps>(({ classNa
     <div className="relative">
       <Input
         type={showBirthdate ? 'text' : 'password'}
+        inputMode="numeric"
+        pattern="[0-9]*"
+        maxLength={10}
         className={cn('hide-birthdate-toggle pr-10', className)}
         ref={ref}
         {...props}

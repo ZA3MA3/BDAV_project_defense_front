@@ -6,10 +6,18 @@ import { Button } from "./components/ui/button"
 import { Input } from './components/ui/input';
 import { Label } from './components/ui/label';
 import { UserNumberInput, BirthdateInput } from './components/ui/UDCs/login';
+import Footer from './components/ui/UDCs/footer';
+
+
 import { BrowserRouter as Router, Routes, Route, useNavigate ,useLocation} from 'react-router-dom';
 import AdminDashboard from './pages/admin-dashboard';
 import ProfessorDashboard from './pages/professor-dashboard';
 import StudentDashboard from './pages/student-dashboard';
+import Bg from './pages/bg-anim';
+
+
+   //import './back-anim.css';
+
 
 /*function App() {
   return (
@@ -20,6 +28,22 @@ import StudentDashboard from './pages/student-dashboard';
 }
  
 export default App*/  
+
+function ProtectedRoute({ children, allowedRole }: { children: React.ReactNode; allowedRole: string }) {
+  const role = localStorage.getItem('role');
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (role !== allowedRole) {
+      // If not authorized, redirect to home page
+      navigate('/', { state: { from: location }, replace: true });
+    }
+  }, [role, allowedRole, navigate, location]);
+
+  return <>{children}</>;
+}
+
 function SignIn() {
   const [userNumber, setUserNumber] = useState('');
   const [password, setPassword] = useState('');
@@ -96,36 +120,50 @@ function SignIn() {
     }
   };
   
+  
+  
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form onSubmit={handleSignIn} className="p-6 bg-white rounded shadow-md h-60 w-90">
-       
-        <div className="mb-4">
-  <Label className="p-1" htmlFor="userNumber">User Number</Label>
-  <UserNumberInput
-  
-    id="userNumber"
-    value={userNumber}
-    onChange={(e) => setUserNumber(e.target.value)}
-    placeholder="Enter your user number"
-  />
-</div>
-<div className="mb-4">
-  <Label className="p-1" htmlFor="birthdate">Birthdate</Label>
-  <BirthdateInput
-    id="birthdate"
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-    placeholder="e.g., 19950315"
-  />
-</div>
-<Button type="submit" className="w-full">
-          Sign In
-        </Button>
-{message && <p className="mt-4 text-center">{message}</p>}
-      </form>
+
+
+ <div className="relative min-h-screen"> 
+
+<Bg />
+
+<div className="flex justify-center items-center min-h-screen absolute inset-0 z-999">
+  <form onSubmit={handleSignIn}className="p-6 bg-white rounded shadow-[0px_4px_12px_2px_rgba(0,0,0,0.5)] h-60 w-90 z-20">
+    <div className="mb-4">
+      <Label className="p-1" htmlFor="userNumber">User Number</Label>
+      <UserNumberInput
+        id="userNumber"
+        value={userNumber}
+        onChange={(e) => setUserNumber(e.target.value)}
+        placeholder="Enter your user number"
+      />
     </div>
+    <div className="mb-4">
+      <Label className="p-1" htmlFor="birthdate">Birthdate</Label>
+      <BirthdateInput
+        id="birthdate"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="e.g., 19950315"
+      />
+    </div>
+    <Button type="submit" className="w-full">
+      Sign In
+    </Button>
+    {message && <p className="mt-4 text-center">{message}</p>}
+  </form>
+</div>
+
+<Footer/>
+</div> 
+
+
+
+
+
   );
 }
 
@@ -133,10 +171,40 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<SignIn />} />
+        {/* <Route path="/" element={<SignIn />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/professor-dashboard" element={<ProfessorDashboard />} />
-        <Route path="/student-dashboard" element={<StudentDashboard />} />
+        <Route path="/student-dashboard" element={<StudentDashboard />} /> */}
+
+
+        <Route path="/" element={<SignIn />} />
+
+<Route
+  path="/admin-dashboard"
+  element={
+    <ProtectedRoute allowedRole="admin">
+      <AdminDashboard />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/professor-dashboard"
+  element={
+    <ProtectedRoute allowedRole="professor">
+      <ProfessorDashboard />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/student-dashboard"
+  element={
+    <ProtectedRoute allowedRole="student">
+      <StudentDashboard />
+    </ProtectedRoute>
+  }
+/>
       </Routes>
     </Router>
   );

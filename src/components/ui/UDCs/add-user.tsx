@@ -72,7 +72,11 @@ export default function AddUser({ isOpen, onClose }: AddUserDialogProps) {
           {/* User Number */}
           <div>
             <Label htmlFor="userNumber">User Number</Label>
-            <Input id="userNumber" name="userNumber" type="number" value={userData.userNumber} onChange={handleChange} required />
+            <Input id="userNumber" name="userNumber" type="number" 
+             inputMode="numeric"
+             pattern="[0-9]*"
+             maxLength={10}
+            value={userData.userNumber} onChange={handleChange} required />
           </div>
 
           {/* Name */}
@@ -90,7 +94,11 @@ export default function AddUser({ isOpen, onClose }: AddUserDialogProps) {
           {/* Password */}
           <div>
             <Label htmlFor="password">Password</Label>
-            <Input id="password" name="password" type="password" value={userData.password} onChange={handleChange} required />
+            <Input id="password" name="password" type="password" 
+             inputMode="numeric"
+             pattern="[0-9]*"
+             maxLength={10}
+            value={userData.password} onChange={handleChange} required />
           </div>
 
           {/* Role Selection */}

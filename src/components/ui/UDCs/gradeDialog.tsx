@@ -318,6 +318,7 @@ interface Student {
                       min="0"
                       max="20"
                       step="0.25"
+                      maxLength={2}
                       value={grades[student.student_id]?.score || ''}
                       onChange={(e) => handleScoreChange(student.student_id, e.target.value)}
                       placeholder="Enter score (0-20)"

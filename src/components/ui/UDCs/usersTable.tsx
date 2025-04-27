@@ -336,7 +336,7 @@ export default function UsersTable() {
             <Plus className="w-4 h-4 mr-2" /> Add User
           </Button>
         </div>
-
+        <div className="max-h-[500px] overflow-y-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -345,7 +345,7 @@ export default function UsersTable() {
               <TableHead className="text-center">Name</TableHead>
               <TableHead className="text-center">Email</TableHead>
               <TableHead className="text-center">Role</TableHead>
-              <TableHead className="text-center">Action</TableHead>
+              {/* <TableHead className="text-center">Action</TableHead> */}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -358,24 +358,24 @@ export default function UsersTable() {
                 <TableCell>
                   {user.role === 1 ? "Student" : user.role === 2 ? "Professor" : "Admin"}
                 </TableCell>
-                <TableCell>
+                {/* <TableCell>
                   <Button
                     variant="ghost"
                     onClick={() => handleDelete(user.user_id)}
                   >
                     <Trash className="w-4 h-4 text-red-500" />
                   </Button>
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             ))}
           </TableBody>
         </Table>
-
+        </div>
         <AddUserDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} />
       </div>
 
       {/* Projects Table */}
-      <div>
+      <div className="max-h-[500px] overflow-y-auto">
         <h2 className="text-xl font-bold mb-4">Projects</h2>
         <Table>
           <TableHeader>
@@ -399,9 +399,9 @@ export default function UsersTable() {
                     : "—"}
                 </TableCell>
                 <TableCell>
-                  <Button size="sm" onClick={() => handleAddSupervisor(project.project_id)}>
-                    {project.supervisor ? "Change Supervisor" : "Add Supervisor"}
-                  </Button>
+                <Button size="sm" onClick={() => handleAddSupervisor(project.project_id)}>
+                     {project.supervisor?.name && project.supervisor?.email ? "Change Supervisor" : "Add Supervisor"}
+                </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -445,6 +445,7 @@ export default function UsersTable() {
             </Button>
         </div>
 
+        <div className="max-h-[500px] overflow-y-auto">
         <Table>
             <TableHeader>
             <TableRow>
@@ -482,7 +483,7 @@ export default function UsersTable() {
             ))}
             </TableBody>
         </Table>
-
+        </div>
         <AddDefenseDialog
             isOpen={isAddDefenseDialogOpen}
             onClose={() => setIsAddDefenseDialogOpen(false)}

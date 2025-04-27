@@ -7,6 +7,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Tabs, TabsList, TabsTrigger } from "../../../components/ui/tabs";
 import {Card,CardContent,CardDescription,CardHeader,CardTitle,} from "../../../components/ui/card";
 import { Badge } from '../../../components/ui/badge';
+import { Plus } from "lucide-react"
+
 
 
 
@@ -243,18 +245,34 @@ export default function AddProject() {
 
   return (
     <>
-      {!project && (
+      {/* {!project && (
         <Button variant="outline" onClick={() => setIsOpen(true)}>
           Add Project
         </Button>
-      )}
+      )} */}
+      {!project && (
+  <div className="flex items-center justify-center h-[60vh]">
+    <div className="border-2 border-dashed border-gray-300 px-100 py-30 rounded-2xl text-center bg-white shadow-sm">
+      
+    <Button
+        variant="default"
+        className="text-lg px-8 py-4 flex items-center gap-2"
+        onClick={() => setIsOpen(true)}
+      >
+        <Plus className="h-5 w-5" />
+        Add Project
+      </Button>
+    </div>
+  </div>
+)}
 
-      {project && (
-        <Card className="mt-4 w-full max-w-xl">
+
+      {/* {project && (
+        <Card className="mt-4 w-full max-w-xl ">
           <CardHeader>
             <CardTitle>{project.title}</CardTitle>
 
-            {/* Supervisor Information */}
+            
             <CardDescription>
               Supervised by: 
               {project.supervisor?.name ? (
@@ -273,7 +291,7 @@ export default function AddProject() {
           <CardContent>
             <p className="text-sm text-muted-foreground">{project.description}</p>
 
-            {/* Defense Information */}
+            
             <div className="mt-4">
               <h3 className="font-semibold text-lg">Defense</h3>
               {project.defense ? (
@@ -290,7 +308,7 @@ export default function AddProject() {
               )}
             </div>
 
-            {/* Grades Section */}
+           
             {isLoading ? (
               <div className="mt-4">
                 <p className="text-sm text-muted-foreground">Loading grades...</p>
@@ -338,7 +356,131 @@ export default function AddProject() {
             )}
           </CardContent>
         </Card>
-      )}
+      )} */}
+
+{project && (
+  <div className="flex justify-center mt-10">
+    <Card className="w-full max-w-2xl shadow-lg">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold text-primary mb-2">
+          {project.title}
+        </CardTitle>
+
+        {/* Supervisor Information */}
+        <CardDescription className="text-base">
+          Supervised by:{" "}
+          {project.supervisor?.name ? (
+            <span className="text-gray-700">
+              {project.supervisor.name} (
+              <a
+                href={`mailto:${project.supervisor.email}`}
+                className="text-blue-600 underline"
+              >
+                {project.supervisor.email}
+              </a>
+              )
+            </span>
+          ) : (
+            <span className="text-muted-foreground">
+              Supervisor not assigned
+            </span>
+          )}
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="space-y-6">
+        {/* Description */}
+        <div>
+          <h3 className="font-semibold text-lg mb-1">Project Description</h3>
+          <p className="text-sm text-muted-foreground">{project.description}</p>
+        </div>
+
+        {/* Defense Information */}
+        <div>
+          <h3 className="font-semibold text-lg mb-2">Defense</h3>
+          {project.defense ? (
+            <div className="space-y-1 text-sm">
+              <p>
+                <strong>📍 Location:</strong> {project.defense.location}
+              </p>
+              <p>
+                <strong>📅 Date:</strong>{" "}
+                {new Date(project.defense.defense_date).toLocaleString()}
+              </p>
+            </div>
+          ) : (
+            <p className="text-muted-foreground">Defense not assigned</p>
+          )}
+        </div>
+
+        {/* Grades Section */}
+        {isLoading ? (
+          <p className="text-sm text-muted-foreground">Loading grades...</p>
+        ) : relevantDefense ? (
+          <div>
+            <h3 className="font-semibold text-lg mb-2">Grades</h3>
+            <div className="space-y-3">
+              {uniqueGrades.length > 0 ? (
+                uniqueGrades.map((grade, index) => (
+                  <div
+                    key={index}
+                    className="flex justify-between items-start p-3 border rounded-lg bg-muted"
+                  >
+                    <div>
+                      <p className="font-medium">{grade.professor.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {grade.professor.email}
+                      </p>
+                      {grade.comment && (
+                        <p className="text-sm mt-1 italic text-gray-600">
+                          "{grade.comment}"
+                        </p>
+                      )}
+                    </div>
+                    <Badge
+                      className={
+                        parseFloat(grade.score) >= 10
+                          ? "bg-green-500"
+                          : "bg-red-500"
+                      }
+                    >
+                      {parseFloat(grade.score).toFixed(2)}/20
+                    </Badge>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  No grades available yet
+                </p>
+              )}
+            </div>
+
+            {/* Final Score */}
+            {finalScore !== null && (
+              <div className="mt-4 pt-4 border-t flex justify-between items-center">
+                <p className="font-semibold text-lg">Final Score:</p>
+                <Badge
+                  className={
+                    finalScore >= 10
+                      ? "bg-green-600 text-lg p-2"
+                      : "bg-red-600 text-lg p-2"
+                  }
+                >
+                  {finalScore.toFixed(2)}/20
+                </Badge>
+              </div>
+            )}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            No grades available yet
+          </p>
+        )}
+      </CardContent>
+    </Card>
+  </div>
+)}
+
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         {/* Dialog content remains the same as your original code */}
